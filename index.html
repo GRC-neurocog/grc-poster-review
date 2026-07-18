@@ -469,6 +469,8 @@ function renderAdminDashboard(){
       <div class="agg-grid" id="admin-summary">
         <div class="agg-card" style="grid-column:1/-1;"><p class="empty-state" style="padding:8px 0;">Loading...</p></div>
       </div>
+      <div class="section-label">Poster rankings (3+ reviews in)</div>
+      <div id="admin-rankings"><p class="empty-state">Loading...</p></div>
       <div class="section-label">Posters below 3 submitted reviews</div>
       <div id="admin-poster-list"><p class="empty-state">Loading...</p></div>
     </div>
@@ -476,12 +478,14 @@ function renderAdminDashboard(){
 
   (async () => {
     const allReviews = await getAllReviews();
-    const submittedByPoster = {};
+    const reviewsByPoster = {};
     allReviews.forEach(r => {
       if(r.submitted && r.posterId !== 'TEST-01'){
-        submittedByPoster[r.posterId] = (submittedByPoster[r.posterId]||0) + 1;
+        (reviewsByPoster[r.posterId] = reviewsByPoster[r.posterId] || []).push(r);
       }
     });
+    const submittedByPoster = {};
+    Object.entries(reviewsByPoster).forEach(([pid, revs]) => { submittedByPoster[pid] = revs.length; });
 
     const posterIds = Object.keys(POSTERS).filter(pid => pid !== 'TEST-01');
     const totalExpected = posterIds.length * 3;
@@ -499,6 +503,41 @@ function renderAdminDashboard(){
         <div class="agg-label">Posters fully reviewed</div>
       </div>
     `;
+
+    // --- Rankings: posters with >= 3 submitted reviews, sorted by overall average score ---
+    const rankingsEl = container.querySelector('#admin-rankings');
+    const ranked = posterIds
+      .filter(pid => (submittedByPoster[pid]||0) >= 3)
+      .map(pid => {
+        const revs = reviewsByPoster[pid];
+        const avg = key => {
+          const vals = revs.map(r => r[key]).filter(v => v != null);
+          return vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+        };
+        const perCriterion = CRITERIA.map(c => avg(c.key));
+        const validCriteria = perCriterion.filter(v => v != null);
+        const overallAvg = validCriteria.length ? (validCriteria.reduce((a,b)=>a+b,0)/validCriteria.length) : null;
+        return { pid, overallAvg, perCriterion, numReviews: revs.length };
+      })
+      .sort((a,b) => (b.overallAvg||0) - (a.overallAvg||0));
+
+    if(ranked.length === 0){
+      rankingsEl.innerHTML = `<p class="empty-state">No posters have 3+ submitted reviews yet.</p>`;
+    } else {
+      rankingsEl.innerHTML = ranked.map((x, i) => {
+        const p = POSTERS[x.pid];
+        const breakdown = CRITERIA.map((c, ci) => `${c.label} ${x.perCriterion[ci] != null ? x.perCriterion[ci].toFixed(1) : '—'}`).join(' &middot; ');
+        return `<div class="poster-card" style="cursor:default;">
+          <div class="board-tag" style="font-size:15px;font-weight:700;min-width:28px;">${i+1}</div>
+          <div class="poster-meta">
+            <p class="poster-title">${p.title}</p>
+            <p class="poster-sub">${p.presenter} &middot; ${p.session === 'Monday/Tuesday' ? 'MT' : 'WT'}-${p.board} &middot; ${x.numReviews} review(s)</p>
+            <p class="poster-sub" style="margin-top:3px;">${breakdown}</p>
+          </div>
+          <div class="status-pill done" style="font-size:14px;">${x.overallAvg.toFixed(1)}</div>
+        </div>`;
+      }).join('');
+    }
 
     const posterListEl = container.querySelector('#admin-poster-list');
     const incomplete = posterIds
