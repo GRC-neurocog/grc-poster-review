@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neurobiology of Cognition - Gordon Research Conference — Poster Review</title>
+<title>GRC Neurobiology of Cognition — Poster Review</title>
 <style>
 :root{
   --ink:#1F2937; --ink-soft:#3B4453; --paper:#FAF7F0; --card:#FFFFFF;
@@ -431,27 +431,9 @@ function renderPresenterDashboard(){
       aggArea.innerHTML = `<p class="empty-state">No submitted reviews yet. Check back once judging is underway.</p>`;
       return;
     }
-    const avg = key => {
-      const vals = reviews.map(r => r[key]).filter(v => v != null);
-      return vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length) : null;
-    };
-    const overall = CRITERIA.map(c => avg(c.key)).filter(v=>v!=null);
-    const overallAvg = overall.length ? (overall.reduce((a,b)=>a+b,0)/overall.length) : null;
-
-    let html = `<div class="section-label" style="margin-top:0;">Aggregate score &middot; ${reviews.length} review(s) in</div>`;
-    html += `<div class="agg-grid">`;
-    html += `<div class="agg-card" style="grid-column:1/-1;background:var(--accent-soft);">
-      <div class="agg-num">${overallAvg ? overallAvg.toFixed(1) : '—'}<span style="font-size:14px;color:var(--muted);">/5</span></div>
-      <div class="agg-label">Overall average</div>
-    </div>`;
-    CRITERIA.forEach(c => {
-      const v = avg(c.key);
-      html += `<div class="agg-card"><div class="agg-num">${v ? v.toFixed(1) : '—'}</div><div class="agg-label">${c.label}</div></div>`;
-    });
-    html += `</div>`;
 
     const comments = reviews.filter(r => r.comment && r.comment.trim());
-    html += `<div class="section-label">Reviewer feedback</div>`;
+    let html = `<div class="section-label" style="margin-top:0;">Reviewer feedback &middot; ${reviews.length} review(s) in</div>`;
     if(comments.length === 0){
       html += `<p class="empty-state">No written comments yet.</p>`;
     } else {
@@ -468,14 +450,17 @@ function renderPresenterDashboard(){
 function renderAdminDashboard(){
   const container = el(`
     <div>
-      <div class="section-label">Overall progress</div>
-      <div id="admin-summary" class="agg-grid"></div>
-      <div class="section-label">Poster rankings (3+ reviews submitted)</div>
-      <div id="admin-rankings"></div>
-      <div class="section-label">Posters with incomplete reviews</div>
-      <div id="admin-poster-list"></div>
+      <div class="section-label">Overall completion</div>
+      <div class="agg-grid" id="admin-summary">
+        <div class="agg-card" style="grid-column:1/-1;"><p class="empty-state" style="padding:8px 0;">Loading...</p></div>
+      </div>
+      <div class="section-label">Poster rankings (3+ reviews in)</div>
+      <div id="admin-rankings"><p class="empty-state">Loading...</p></div>
+      <div class="section-label">Posters below 3 submitted reviews</div>
+      <div id="admin-poster-list"><p class="empty-state">Loading...</p></div>
     </div>
   `);
+
   (async () => {
     const allReviews = await getAllReviews();
     const reviewsByPoster = {};
