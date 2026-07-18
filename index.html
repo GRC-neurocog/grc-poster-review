@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRC Neurobiology of Cognition — Poster Review</title>
+<style>
+:root{
+  --ink:#1F2937; --ink-soft:#3B4453; --paper:#FAF7F0; --card:#FFFFFF;
+  --accent:#B5860C; --accent-soft:#F4E8C9; --muted:#6B7280; --border:#E4DFD3;
+  --success:#3F6C51; --success-soft:#E3EEE6; --danger:#9B4A3F;
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.5;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 80px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--card);position:sticky;top:0;z-index:20;}
+.brand{font-family:var(--font-display);font-size:18px;letter-spacing:0.2px;}
+.brand small{display:block;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;}
+.who{font-size:13px;color:var(--muted);text-align:right;}
+.who button{margin-left:8px;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--ink-soft);cursor:pointer;}
+.login-card{max-width:380px;margin:14vh auto 0;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px 28px;text-align:center;}
+.login-card h1{font-family:var(--font-display);font-size:22px;margin:0 0 4px;}
+.login-card p.sub{color:var(--muted);font-size:13px;margin:0 0 24px;}
+.login-card input{width:100%;font-family:var(--font-mono);font-size:16px;letter-spacing:1px;text-align:center;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--paper);margin-bottom:12px;text-transform:lowercase;}
+.login-card input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:none;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font-body);}
+.btn:hover{background:var(--ink-soft);}
+.btn:disabled{opacity:0.5;cursor:default;}
+.btn.secondary{background:none;color:var(--ink);border:1px solid var(--border);}
+.btn.secondary:hover{background:var(--accent-soft);}
+.btn.full{width:100%;}
+.error-msg{color:var(--danger);font-size:13px;margin-top:8px;min-height:16px;}
+.tabs{display:flex;gap:4px;margin:20px 0 16px;border-bottom:1px solid var(--border);}
+.tab{padding:10px 4px;margin-right:20px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;font-weight:500;}
+.tab.active{color:var(--ink);border-bottom-color:var(--accent);}
+.section-label{font-family:var(--font-mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:24px 0 10px;}
+.poster-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;gap:12px;align-items:center;}
+.poster-card:hover{border-color:var(--accent);}
+.board-tag{font-family:var(--font-mono);font-size:12px;background:var(--paper);border:1px solid var(--border);border-radius:6px;padding:4px 7px;min-width:44px;text-align:center;color:var(--ink-soft);flex-shrink:0;}
+.poster-meta{flex:1;min-width:0;}
+.poster-title{font-size:14px;font-weight:500;margin:0 0 3px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.poster-sub{font-size:12px;color:var(--muted);}
+.track-pill{display:inline-block;font-size:10px;font-family:var(--font-mono);background:var(--accent-soft);color:#6B5312;padding:2px 7px;border-radius:20px;margin-top:4px;}
+.status-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;flex-shrink:0;}
+.status-pill.done{background:var(--success-soft);color:var(--success);}
+.status-pill.pending{background:var(--accent-soft);color:#6B5312;}
+.review-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.review-panel h2{font-family:var(--font-display);font-size:19px;margin:0 0 2px;}
+.review-panel .presenter-line{font-size:13px;color:var(--muted);margin-bottom:16px;}
+.criterion{margin-bottom:18px;}
+.criterion-label{font-size:13px;font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;}
+.criterion-hint{font-weight:400;color:var(--muted);font-size:12px;}
+.dots{display:flex;gap:8px;}
+.dot{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:var(--paper);cursor:pointer;font-family:var(--font-mono);font-size:14px;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;}
+.dot.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+textarea{width:100%;min-height:100px;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:var(--font-body);font-size:14px;resize:vertical;background:var(--paper);}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.save-row{display:flex;gap:10px;margin-top:16px;align-items:center;}
+.save-status{font-size:12px;color:var(--muted);}
+.optional-flag{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;background:var(--accent-soft);color:#6B5312;padding:3px 8px;border-radius:6px;margin-left:8px;}
+.agg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;}
+.agg-card{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:12px;}
+.agg-num{font-family:var(--font-display);font-size:26px;}
+.agg-label{font-size:11px;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.5px;}
+.comment-block{background:var(--paper);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:10px;font-size:13.5px;}
+.empty-state{text-align:center;color:var(--muted);padding:40px 20px;font-size:14px;}
+.back-link{font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:14px;display:inline-block;}
+.back-link:hover{color:var(--ink);}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, getDocs, query, where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {"apiKey": "AIzaSyD8h0694rPEPP1FTc4OLzjDwv3l91Af9wM", "authDomain": "grc-posterreview.firebaseapp.com", "projectId": "grc-posterreview", "storageBucket": "grc-posterreview.firebasestorage.app", "messagingSenderId": "314897378169", "appId": "1:314897378169:web:4343578c1d4efd56555da8"};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+const POSTERS = {"MT-01": {"id": "MT-01", "session": "Monday/Tuesday", "board": 1, "presenter": "Amematsro, Elom", "affiliation": "Harvard University", "title": "Medial temporal lobe\u2013cerebellar interactions enable structure learning in motor control", "track": "Motor/Sensorimotor/Hippocampus/Computational/Theory"}, "MT-02": {"id": "MT-02", "session": "Monday/Tuesday", "board": 2, "presenter": "Tang, Tianhong", "affiliation": "Johns Hopkins University", "title": "Thalamic Population States Coordinate Long-Range Prefrontal Functional Connectivity", "track": "PFC/Cognition"}, "MT-03": {"id": "MT-03", "session": "Monday/Tuesday", "board": 3, "presenter": "Badman, Ryan", "affiliation": "Harvard Medical School", "title": "Bigger simulated worlds, with smarter artificially intelligent agents, are an important analysis testbed for naturalistic neuroscience", "track": "Computational/Theory"}, "MT-04": {"id": "MT-04", "session": "Monday/Tuesday", "board": 4, "presenter": "Burk, Diana", "affiliation": "National Institutes of Health", "title": "Coordinated neural activity across the limbic system predicts motivational state", "track": "Social/Motivation/Behavior"}, "MT-05": {"id": "MT-05", "session": "Monday/Tuesday", "board": 5, "presenter": "Buyukyazgan, Defne", "affiliation": "Brown University", "title": "Beta Oscillations in Macaque Prefrontal Cortex Mark Bounds of Abstract Visual Sequence Violations", "track": "PFC/Working Memory"}, "MT-06": {"id": "MT-06", "session": "Monday/Tuesday", "board": 6, "presenter": "Rivera N\u00fa\u00f1ez, Maria Vanessa", "affiliation": "Brown University", "title": "Rostrolateral Prefrontal Cortex and Prefrontal Network Dynamics During Human Abstract Sequence Monitoring", "track": "PFC/Working Memory"}, "MT-07": {"id": "MT-07", "session": "Monday/Tuesday", "board": 7, "presenter": "Casto, Colton", "affiliation": "Harvard / MIT", "title": "The cerebellum plays a privileged role during language development", "track": "Motor/Sensorimotor/Cerebellum"}, "MT-08": {"id": "MT-08", "session": "Monday/Tuesday", "board": 8, "presenter": "Chandrasekaran, Adithyanarayan", "affiliation": "University of Pittsburgh", "title": "Jumping the gun: visual and motor cortical contributions to impulsivity", "track": "Motor/Sensorimotor/Cerebellum"}, "MT-09": {"id": "MT-09", "session": "Monday/Tuesday", "board": 9, "presenter": "Chen, Peiyu", "affiliation": "Vanderbilt University", "title": "The cost of efficiency in flexible neural representations", "track": "Decision-Making/Cognition"}, "MT-10": {"id": "MT-10", "session": "Monday/Tuesday", "board": 10, "presenter": "Chen, Ruidong", "affiliation": "Massachusetts Institute of Technology", "title": "Hypothesis testing in macaque monkeys", "track": "Decision-Making/Cognition"}, "MT-11": {"id": "MT-11", "session": "Monday/Tuesday", "board": 11, "presenter": "Chiang, Feng-Kuei", "affiliation": "New York University", "title": "Representational gradients of mnemonic chunking in primate lateral prefrontal cortex", "track": "PFC/Working Memory"}, "MT-12": {"id": "MT-12", "session": "Monday/Tuesday", "board": 12, "presenter": "Cooley, Rory", "affiliation": "University of Chicago", "title": "How does area LIP's role in categorization generalize across categorization tasks?", "track": "Decision-Making/Perception"}, "MT-13": {"id": "MT-13", "session": "Monday/Tuesday", "board": 13, "presenter": "Costa, Renan", "affiliation": "University of Chicago", "title": "Distinct cortex-wide dynamics underlie evidence accumulation, short-term memory, and choice", "track": "Decision-Making/Cognition"}, "MT-14": {"id": "MT-14", "session": "Monday/Tuesday", "board": 14, "presenter": "Couras, Juliana", "affiliation": "University of Pittsburgh", "title": "Evidence of working memory computations through the warping of neural trajectories", "track": "PFC/Working Memory"}, "MT-15": {"id": "MT-15", "session": "Monday/Tuesday", "board": 15, "presenter": "Dennis, Emily", "affiliation": "Janelia Research Campus, HHMI", "title": "An auditory working memory strategy supporting sound-driven hunting in Mus musculus mice", "track": "Perception/Sensory"}, "MT-16": {"id": "MT-16", "session": "Monday/Tuesday", "board": 16, "presenter": "Desai, Nisarg", "affiliation": "Emory University", "title": "A 3D motion capture and deep learning pipeline for motor abnormality detection in rhesus macaques", "track": "Motor/Sensorimotor/Cerebellum"}, "MT-17": {"id": "MT-17", "session": "Monday/Tuesday", "board": 17, "presenter": "DiRisio, Grace", "affiliation": "University of Chicago", "title": "Neuronal signatures of successful one-shot memory in mid-level visual cortex", "track": "Perception/Sensory"}, "MT-18": {"id": "MT-18", "session": "Monday/Tuesday", "board": 18, "presenter": "DiSanto, Jennifer", "affiliation": "University of California San Francisco", "title": "Mesolimbic dopamine release does not convey a temporal difference reward prediction error in a fully observed task", "track": "Striatum/Dopamine"}, "MT-19": {"id": "MT-19", "session": "Monday/Tuesday", "board": 19, "presenter": "Dong, Yelin", "affiliation": "University of Rochester", "title": "Bayesian and Neural Models of Joint Perceptual Inference of Object Motion and Depth", "track": "Perception/Sensory"}, "MT-20": {"id": "MT-20", "session": "Monday/Tuesday", "board": 20, "presenter": "Duan, Ziyi", "affiliation": "New York University", "title": "Putting visual working memory to work", "track": "PFC/Working Memory"}, "MT-21": {"id": "MT-21", "session": "Monday/Tuesday", "board": 21, "presenter": "Elorette, Catherine", "affiliation": "Icahn School of Medicine at Mount Sinai", "title": "Neural basis of task-based fMRI signals in ventral prefrontal cortex", "track": "PFC/Cognition"}, "MT-22": {"id": "MT-22", "session": "Monday/Tuesday", "board": 22, "presenter": "Elston, Thomas", "affiliation": "University of Texas at Austin", "title": "Feature-based valuation in human and non-human primates", "track": "Decision-Making/Cognition"}, "MT-23": {"id": "MT-23", "session": "Monday/Tuesday", "board": 23, "presenter": "Enkavi, Zeynep", "affiliation": "Claremont McKenna College", "title": "Human simple choice in non-human primate experimental paradigms", "track": "Decision-Making/Cognition"}, "MT-24": {"id": "MT-24", "session": "Monday/Tuesday", "board": 24, "presenter": "Garcia-Garcia, Martha", "affiliation": "National Institutes of Health, USA", "title": "Granule cells reorient cortical trajectories to separate contexts but preserve their geometry", "track": "Hippocampus/Memory"}, "MT-25": {"id": "MT-25", "session": "Monday/Tuesday", "board": 25, "presenter": "Goldberg, Emily", "affiliation": "University of Pittsburgh", "title": "Memory Systems and Recovery: Neurobiological Insights into Language Re-Learning in Post-Stroke Aphasia", "track": "Molecular/Cellular/Clinical"}, "MT-26": {"id": "MT-26", "session": "Monday/Tuesday", "board": 26, "presenter": "Gribbin, Ani", "affiliation": "Carnegie Mellon University", "title": "Pervasive serial dependence effects in the eye movements of non-human primates", "track": "Perception/Sensory"}, "MT-27": {"id": "MT-27", "session": "Monday/Tuesday", "board": 27, "presenter": "Grigg, Madison", "affiliation": "Carnegie Mellon University", "title": "Separability of Spatial Working Memory Representations in Prefrontal Cortex", "track": "PFC/Working Memory"}, "MT-28": {"id": "MT-28", "session": "Monday/Tuesday", "board": 28, "presenter": "Grigsby, Erinn", "affiliation": "Universit\u00e9 de Montr\u00e9al", "title": "The energetics of strategy shifts in the prefrontal cortex", "track": "PFC/Cognition"}, "MT-29": {"id": "MT-29", "session": "Monday/Tuesday", "board": 29, "presenter": "Gurnani, Harsha", "affiliation": "New York University", "title": "Multi-scale neural dynamics underlie different axes of flexibility in decision making", "track": "Decision-Making/Cognition"}, "MT-30": {"id": "MT-30", "session": "Monday/Tuesday", "board": 30, "presenter": "Hare, Stephanie", "affiliation": "University of Maryland School of Medicine", "title": "TMS Motor Cortical Inhibition: Preliminary Analysis Mapping the Cognitive Correlates in People with Schizophrenia", "track": "Molecular/Cellular/Clinical"}, "MT-31": {"id": "MT-31", "session": "Monday/Tuesday", "board": 31, "presenter": "Hesse, Janis", "affiliation": "UC Berkeley", "title": "A temporal code for conscious perception", "track": "Perception/Sensory"}, "MT-32": {"id": "MT-32", "session": "Monday/Tuesday", "board": 32, "presenter": "Hu, Jiahua", "affiliation": "NICHD", "title": "UBE3A Controls Activity-Dependent Kv4.2 Channel Turnover to Regulate Synaptic Plasticity and Cognitive Function in Angelman Syndrome", "track": "Molecular/Cellular/Clinical"}, "MT-33": {"id": "MT-33", "session": "Monday/Tuesday", "board": 33, "presenter": "Jackson, Samantha", "affiliation": "UC Berkeley", "title": "How does the brain prepare for adolescent dispersal? Using seasonal photoperiod in a wild mouse to examine plasticity in timing of body, brain, and behavioral development.", "track": "Molecular/Cellular/Clinical"}, "MT-34": {"id": "MT-34", "session": "Monday/Tuesday", "board": 34, "presenter": "Jensen, Cambria", "affiliation": "University of Utah", "title": "Experience-dependent transformation of odor representations along the olfactory-medial temporal lobe axis using in-vivo and in-silico approaches", "track": "Hippocampus/Memory"}, "MT-35": {"id": "MT-35", "session": "Monday/Tuesday", "board": 35, "presenter": "Khurana, Hridai", "affiliation": "European Molecular Biology Laboratory, Rome", "title": "Fleeing is Believing: Adaptive behavior under social threat as an inference process", "track": "Social/Motivation/Behavior"}, "MT-36": {"id": "MT-36", "session": "Monday/Tuesday", "board": 36, "presenter": "Kottapalli, Srividya", "affiliation": "OMRF/OUHC", "title": "A Splicing Grammar Framework for Microexon Dysregulation in Cognitive Decline and Alzheimer's Disease", "track": "Molecular/Cellular/Clinical"}, "MT-37": {"id": "MT-37", "session": "Monday/Tuesday", "board": 37, "presenter": "Lalta, Nicole", "affiliation": "Rutgers University", "title": "Individualizing repetitive visual stimulation to enhance neuromodulation.", "track": "Perception/Sensory"}, "MT-38": {"id": "MT-38", "session": "Monday/Tuesday", "board": 38, "presenter": "Lazzari, John", "affiliation": "Yale University", "title": "Multi-Regional Recurrent Networks Elucidate Cell Type Specific Contributions of the Basal Ganglia During Motor Timing", "track": "Motor/Sensorimotor/Cerebellum"}, "MT-39": {"id": "MT-39", "session": "Monday/Tuesday", "board": 39, "presenter": "Lee, Kyu Hyun", "affiliation": "UCSF", "title": "Vision shapes internal goal-progress representations in primary visual cortex", "track": "Perception/Sensory"}, "MT-40": {"id": "MT-40", "session": "Monday/Tuesday", "board": 40, "presenter": "Lee, Kenji", "affiliation": "Boston University", "title": "Cell type-informed dynamical systems uncover mechanisms of cortical computation", "track": "Computational/Theory"}, "MT-41": {"id": "MT-41", "session": "Monday/Tuesday", "board": 41, "presenter": "Lee, Donghyeok", "affiliation": "University of California, San Francisco", "title": "Pre-stimulus network dynamics encode subjective uncertainty and bias perceptual learning", "track": "Perception/Sensory"}, "MT-42": {"id": "MT-42", "session": "Monday/Tuesday", "board": 42, "presenter": "Li, Jingyi", "affiliation": "Peking University", "title": "Oculomotor Signatures Reveal Hierarchical Scaffolding of Sequences in Working Memory", "track": "PFC/Working Memory"}, "MT-43": {"id": "MT-43", "session": "Monday/Tuesday", "board": 43, "presenter": "Li, Tianshu", "affiliation": "NYU", "title": "Defining Functional Modules for Cognitive Tasks in Connectome-Constrained Recurrent Neural Networks", "track": "Computational/Theory"}, "MT-44": {"id": "MT-44", "session": "Monday/Tuesday", "board": 44, "presenter": "Libedinsky, Camilo", "affiliation": "National University of Singapore", "title": "No evidence for activity silent working memory in prefrontal cortex", "track": "PFC/Working Memory"}, "MT-45": {"id": "MT-45", "session": "Monday/Tuesday", "board": 45, "presenter": "Lopez, Emily", "affiliation": "Carnegie Mellon University", "title": "Global and local hemispheric contributions to saccade execution in the primate frontal eye fields", "track": "Motor/Sensorimotor/Cerebellum"}, "MT-46": {"id": "MT-46", "session": "Monday/Tuesday", "board": 46, "presenter": "Bakotich, Ellen", "affiliation": "University of Washington", "title": "Primate hippocampus carries an image-specific population code during naturalistic image viewing", "track": "Hippocampus/Memory"}, "MT-47": {"id": "MT-47", "session": "Monday/Tuesday", "board": 47, "presenter": "Gulli, Roberto", "affiliation": "Icahn School of Medicine at Mount Sinai", "title": "Dimensionality and dynamics of learning and decision-making across the hippocampus, prefrontal, and premotor cortex", "track": "Hippocampus/Memory"}, "MT-48": {"id": "MT-48", "session": "Monday/Tuesday", "board": 48, "presenter": "Landi, Sofia", "affiliation": "University of Washington", "title": "Hippocampal population dynamics during naturalistic learning in primates", "track": "Hippocampus/Memory"}, "MT-49": {"id": "MT-49", "session": "Monday/Tuesday", "board": 49, "presenter": "Pan, Deng", "affiliation": "University of Oxford", "title": "Causal role of human hippocampus in relational structure learning", "track": "Hippocampus/Memory"}, "MT-50": {"id": "MT-50", "session": "Monday/Tuesday", "board": 50, "presenter": "Perkins, Aster", "affiliation": "New York University", "title": "Investigating the role of hippocampal remapping in state inference", "track": "Hippocampus/Memory"}, "MT-51": {"id": "MT-51", "session": "Monday/Tuesday", "board": 51, "presenter": "Shirhatti, Vinay", "affiliation": "University of Chicago", "title": "Primate oculomotor areas and hippocampus support rapid value-based learning and decisions during saccade-based foraging", "track": "Hippocampus/Memory"}, "MT-52": {"id": "MT-52", "session": "Monday/Tuesday", "board": 52, "presenter": "Tseng, Shih-Yi", "affiliation": "University of California, San Francisco", "title": "Sequential representation development and prefrontal abstraction in the hippocampal-prefrontal network during task learning and generalization", "track": "Hippocampus/Memory"}, "WT-01": {"id": "WT-01", "session": "Wednesday/Thursday", "board": 1, "presenter": "McConnell, Sam", "affiliation": "Icahn School of Medicine at Mount Sinai", "title": "Neural dynamics of updating taste reward expectations", "track": "OFC/Reward-Value"}, "WT-02": {"id": "WT-02", "session": "Wednesday/Thursday", "board": 2, "presenter": "Charbonneau, Joey", "affiliation": "New York University", "title": "Effects of OFC microstimulation on expectation updating and interactions with internal states", "track": "OFC/Reward-Value"}, "WT-03": {"id": "WT-03", "session": "Wednesday/Thursday", "board": 3, "presenter": "Langdon, Angela", "affiliation": "National Institute of Mental Health", "title": "Identity specific reward expectations control the dynamics of motivated responding", "track": "OFC/Reward-Value"}, "WT-04": {"id": "WT-04", "session": "Wednesday/Thursday", "board": 4, "presenter": "albayrak, emirhan", "affiliation": "Rutgers University Newark", "title": "Physiological Cell Types in Orbitofrontal Cortex Exhibit Distinct Encoding of Location, Value and Choice", "track": "OFC/Reward-Value"}, "WT-05": {"id": "WT-05", "session": "Wednesday/Thursday", "board": 5, "presenter": "Ogasawara, Takaya", "affiliation": "Johns Hopkins University", "title": "Temporal\u2013orbitofrontal pathway regulates choices across physical reward and visual novelty", "track": "OFC/Reward-Value"}, "WT-06": {"id": "WT-06", "session": "Wednesday/Thursday", "board": 6, "presenter": "Rodriguez Deliz, Charlie", "affiliation": "NYU", "title": "Value- and gaze-independent encoding of perceptual difficulty in orbitofrontal cortex", "track": "OFC/Reward-Value"}, "WT-07": {"id": "WT-07", "session": "Wednesday/Thursday", "board": 7, "presenter": "Starkweather, Clara", "affiliation": "UCSF", "title": "Differential contributions of medial and lateral orbitofrontal cortex to approach-avoidance decision-making", "track": "OFC/Reward-Value"}, "WT-08": {"id": "WT-08", "session": "Wednesday/Thursday", "board": 8, "presenter": "McDonnell, Megan", "affiliation": "Carnegie Mellon University", "title": "Spatial attention mediates perceptual failures in choking under pressure", "track": "Perception/Sensory"}, "WT-09": {"id": "WT-09", "session": "Wednesday/Thursday", "board": 9, "presenter": "Love, Bradley", "affiliation": "Los Alamos National Laboratory", "title": NaN, "track": "Unclear (no title listed)"}, "WT-10": {"id": "WT-10", "session": "Wednesday/Thursday", "board": 10, "presenter": "Luo, Jiaqi", "affiliation": "The University of Chicago", "title": "A cholinergic mechanism orchestrating task-dependent computation across the cortex", "track": "Molecular/Cellular/Clinical"}, "WT-11": {"id": "WT-11", "session": "Wednesday/Thursday", "board": 11, "presenter": "Melkumyan, Mariam", "affiliation": "National Institutes of Health", "title": "Microglial GPR110 Modulates Inflammation-Associated Behavioral Outcomes", "track": "Molecular/Cellular/Clinical"}, "WT-12": {"id": "WT-12", "session": "Wednesday/Thursday", "board": 12, "presenter": "Miao, Zizhuang", "affiliation": "Dartmouth College", "title": "Using AI-generated videos to investigate the roles of attribution and impressions in clinical outcomes", "track": "Social/Motivation/Behavior"}, "WT-13": {"id": "WT-13", "session": "Wednesday/Thursday", "board": 13, "presenter": "Mo, Jonathan", "affiliation": "UC Davis", "title": "Boundary Cells Encode Predictive Inference During Event Sequence Learning in Humans", "track": "Hippocampus/Memory"}, "WT-14": {"id": "WT-14", "session": "Wednesday/Thursday", "board": 14, "presenter": "Nandy, Anirvan", "affiliation": "Yale University", "title": "Spatiotemporal Continuity Shapes Information Flow in the Primate Ventral Stream", "track": "Perception/Sensory"}, "WT-15": {"id": "WT-15", "session": "Wednesday/Thursday", "board": 15, "presenter": "Pai, Julia", "affiliation": "Johns Hopkins University", "title": "The role of astrocytes in reinforcement learning", "track": "Molecular/Cellular/Clinical"}, "WT-16": {"id": "WT-16", "session": "Wednesday/Thursday", "board": 16, "presenter": "Qi, Guangyao", "affiliation": "Yale University", "title": "Shared and compositional facial dynamics predict social coordination in primates", "track": "Social/Motivation/Behavior"}, "WT-17": {"id": "WT-17", "session": "Wednesday/Thursday", "board": 17, "presenter": "Qian, Yichen", "affiliation": "National University of Singapore", "title": "Familiarity Affects Sequence Working Memory Codes in Macaque Prefrontal Cortex and Recurrent Neural Networks", "track": "PFC/Working Memory"}, "WT-18": {"id": "WT-18", "session": "Wednesday/Thursday", "board": 18, "presenter": "Qin, Ashley", "affiliation": "University of California, San Francisco", "title": "Performance feedback shapes neural encoding through prediction error during non-native speech category learning", "track": "Perception/Sensory"}, "WT-19": {"id": "WT-19", "session": "Wednesday/Thursday", "board": 19, "presenter": "Shi, Weikang", "affiliation": "Yale University", "title": "Effort Costs and Social Information Shape Cooperative Decisions", "track": "Social/Motivation/Behavior"}, "WT-20": {"id": "WT-20", "session": "Wednesday/Thursday", "board": 20, "presenter": "Smoulder, Adam", "affiliation": "Boston University", "title": "Selective and dynamic interactions in the motor system during naturalistic reach-to-grasp", "track": "Motor/Sensorimotor/Cerebellum"}, "WT-21": {"id": "WT-21", "session": "Wednesday/Thursday", "board": 21, "presenter": "Stine, Gabriel", "affiliation": "MIT", "title": "Predictive control of neocortical dynamics by the cerebellum", "track": "Motor/Sensorimotor/Cerebellum"}, "WT-22": {"id": "WT-22", "session": "Wednesday/Thursday", "board": 22, "presenter": "Sun, Cong", "affiliation": "Sainsbury Wellcome Centre, University College London", "title": "Dopamine influences risk preference through value learning, not the utility function", "track": "Striatum/Dopamine"}, "WT-23": {"id": "WT-23", "session": "Wednesday/Thursday", "board": 23, "presenter": "Tangen, Anne Claire", "affiliation": "Carnegie Mellon University", "title": "Impact of reward on perceptual decisions and neuronal responses in visual cortex", "track": "OFC/Reward-Value"}, "WT-24": {"id": "WT-24", "session": "Wednesday/Thursday", "board": 24, "presenter": "Teichert, Tobias", "affiliation": "University of Pittsburgh", "title": "Brain Function and Connectivity at the Mesoscopic Scale: Evoked Potentials, Neuromodulation, and Circadian Dynamics in the Freely Behaving Non-Human Primate", "track": "Computational/Theory"}, "WT-25": {"id": "WT-25", "session": "Wednesday/Thursday", "board": 25, "presenter": "Tian, Lucas", "affiliation": "Rockefeller University", "title": "Neural basis of novel combinatorial construction in primate frontal cortex", "track": "PFC/Cognition"}, "WT-26": {"id": "WT-26", "session": "Wednesday/Thursday", "board": 26, "presenter": "Tobing, Christofer", "affiliation": "The University of Alabama", "title": "\"Why\" questions matter: effects of prediction and curiosity on the acquisition of neuroanatomical knowledge", "track": "Decision-Making/Cognition"}, "WT-27": {"id": "WT-27", "session": "Wednesday/Thursday", "board": 27, "presenter": "Zhou, Yue-Qing", "affiliation": "Johns Hopkins University", "title": "Effects of Visual Landmark Misalignment on Head Direction Network in Retrosplenial Cortex and Postsubiculum", "track": "Perception/Sensory"}, "WT-28": {"id": "WT-28", "session": "Wednesday/Thursday", "board": 28, "presenter": "Walker, Jeffrey", "affiliation": "Yale University", "title": "Feedback control in the dynamics of sensorimotor circuits during marmoset prey capture", "track": "Motor/Sensorimotor/Cerebellum"}, "WT-29": {"id": "WT-29", "session": "Wednesday/Thursday", "board": 29, "presenter": "Wei, Lai", "affiliation": "University of Chicago", "title": "Increases of cortical neuron spike rate guide behavior far more effectively than equivalent spike rate decreases", "track": "Motor/Sensorimotor/Cerebellum"}, "WT-30": {"id": "WT-30", "session": "Wednesday/Thursday", "board": 30, "presenter": "Wen, Xuan", "affiliation": "Vanderbilt University", "title": "Planning ahead depends on structural knowledge and working memory, but is segregated from attention and learning in primates", "track": "PFC/Working Memory"}, "WT-31": {"id": "WT-31", "session": "Wednesday/Thursday", "board": 31, "presenter": "Wu, Jiang", "affiliation": "California Institute of Technology", "title": "Persistent hippocampal code of lifelong spatial memory", "track": "Hippocampus/Memory"}, "WT-32": {"id": "WT-32", "session": "Wednesday/Thursday", "board": 32, "presenter": "Xia, Ningjing", "affiliation": "Harvard University", "title": "Occam's razor in the mouse brain", "track": "Computational/Theory"}, "WT-33": {"id": "WT-33", "session": "Wednesday/Thursday", "board": 33, "presenter": "Xiong, Yanyu", "affiliation": "Center for Excellence in Brain Science and Intelligence Technology, Chinese Academy of Sciences", "title": "Macaque frontal cortical ripples associated with mixed selectivity neurons mediate sequence organization", "track": "PFC/Cognition"}, "WT-34": {"id": "WT-34", "session": "Wednesday/Thursday", "board": 34, "presenter": "Xu, Yi-Ang", "affiliation": "Center for Excellence in Brain Science and Intelligence Technology / Chinese Academy of Sciences", "title": "Compositional Representation Underpins Zero-Shot Sequence Generalization in Macaque Prefrontal Cortex", "track": "PFC/Cognition"}, "WT-35": {"id": "WT-35", "session": "Wednesday/Thursday", "board": 35, "presenter": "Xu, Jiamin", "affiliation": "East China Normal University", "title": "Hippocampal Spatial Encoding During Latent Learning Facilitates Subsequent Behavioral Optimization", "track": "Hippocampus/Memory"}, "WT-36": {"id": "WT-36", "session": "Wednesday/Thursday", "board": 36, "presenter": "Yang, Haiming", "affiliation": "Peking University", "title": "Hierarchical high-order structure facilitates temporal abstraction through long-term scaffold embedding", "track": "Decision-Making/Cognition"}, "WT-37": {"id": "WT-37", "session": "Wednesday/Thursday", "board": 37, "presenter": "Yazdan Shahmorad, Padideh", "affiliation": "University of Washington", "title": "Selective Optogenetic Control of Frontal Eye Field Inhibitory Circuits in Non-Human Primates Using Red-Light Sensitive ChRmine", "track": "Motor/Sensorimotor/Cerebellum"}, "WT-38": {"id": "WT-38", "session": "Wednesday/Thursday", "board": 38, "presenter": "Yu, Jai", "affiliation": "University of Chicago", "title": "Contribution of beta oscillations in hippocampal-cortical networks to learning", "track": "Hippocampus/Memory"}, "WT-39": {"id": "WT-39", "session": "Wednesday/Thursday", "board": 39, "presenter": "Yuan, Jing", "affiliation": "Yale University", "title": "Motivational asymmetries generate role-differentiated cooperative dynamics and neural representations in marmosets", "track": "Social/Motivation/Behavior"}, "WT-40": {"id": "WT-40", "session": "Wednesday/Thursday", "board": 40, "presenter": "Zajkowski, Wojciech", "affiliation": "NIH", "title": "Reward Landscapes Bias Continuous Visual Tracking of Naturalistic Stimuli in Macaques", "track": "OFC/Reward-Value"}, "WT-41": {"id": "WT-41", "session": "Wednesday/Thursday", "board": 41, "presenter": "Zambre, Mrunal", "affiliation": "University of Pittsburgh", "title": "PUPIL RESPONSE REFLECTS THE PREDICTED COGNITIVE LOAD OF DIFFERENT REASONING STRATEGIES", "track": "Decision-Making/Cognition"}, "WT-42": {"id": "WT-42", "session": "Wednesday/Thursday", "board": 42, "presenter": "Zhang, Ling-Yi", "affiliation": "Stanford University", "title": "Imaging Intrinsic Enteric Neuron Response to Luminal Chemical Cues in Live Animals", "track": "Molecular/Cellular/Clinical"}, "WT-43": {"id": "WT-43", "session": "Wednesday/Thursday", "board": 43, "presenter": "Zhang, Wenhao", "affiliation": "UT Southwestern Medical Center", "title": "Canonical cortical recurrent circuits: a unified Bayesian machine for cognitive processing", "track": "Computational/Theory"}, "WT-44": {"id": "WT-44", "session": "Wednesday/Thursday", "board": 44, "presenter": "Zhang, Ningyu", "affiliation": "Institute of Neuroscience / Chinese Academy of Sciences", "title": "Zero-shot rule inference through distinct parietal and cingulate mechanisms", "track": "PFC/Cognition"}, "WT-45": {"id": "WT-45", "session": "Wednesday/Thursday", "board": 45, "presenter": "Lin, Chung-Yueh", "affiliation": "UC San Diego", "title": "Distinct cortical subnetworks for value-based decision making", "track": "Decision-Making/Cognition"}, "WT-46": {"id": "WT-46", "session": "Wednesday/Thursday", "board": 46, "presenter": "Zhang, Huihui", "affiliation": "Peking University", "title": "Spontaneous Action Trajectories Reveal Context-Dependent Updating of Prior Beliefs", "track": "Decision-Making/Cognition"}, "WT-47": {"id": "WT-47", "session": "Wednesday/Thursday", "board": 47, "presenter": "Zhang, Yongxu", "affiliation": "Yale University", "title": "Uncovering Multi-Regional Inputs Using Input-Driven Switching Recurrent Neural Networks", "track": "Computational/Theory"}, "WT-48": {"id": "WT-48", "session": "Wednesday/Thursday", "board": 48, "presenter": "Zhang, Wei Nora", "affiliation": "duke university", "title": "Brain-wide contextual states shape cortical\u2013subcortical dynamics for flexible and robust motor planning", "track": "Motor/Sensorimotor/Cerebellum"}, "WT-49": {"id": "WT-49", "session": "Wednesday/Thursday", "board": 49, "presenter": "Zhao, Bingzhen", "affiliation": "Duke university", "title": "Probing decision formation and changes of mind in the mouse", "track": "Decision-Making/Cognition"}, "WT-50": {"id": "WT-50", "session": "Wednesday/Thursday", "board": 50, "presenter": "Womelsdorf, Thilo", "affiliation": "Vanderbilt University", "title": "Canonical cognitive processes supported by the fronto-striatal-thalamic network.", "track": "Striatum/Dopamine"}, "WT-51": {"id": "WT-51", "session": "Wednesday/Thursday", "board": 51, "presenter": "Zhuang, Xiaowen", "affiliation": "University of California San Francisco", "title": "Aberrant striatal activity and top-down cortico-striatal synaptic inputs mediates impulsive decision-making in Parkinson's disease.", "track": "Striatum/Dopamine"}, "WT-52": {"id": "WT-52", "session": "Wednesday/Thursday", "board": 52, "presenter": "Janssen, Miriam", "affiliation": "Dartmouth College", "title": "Investigating the link between hippocampal sharp-wave ripples and ventral striatal dopamine", "track": "Hippocampus/Memory"}, "WT-53": {"id": "WT-53", "session": "Wednesday/Thursday", "board": 53, "presenter": "Albrecht, Elizabeth", "affiliation": "NIH", "title": "Relating fiber photometry signals to behavior: Unique contribution of dopamine versus D1 MSN activity in dorsal striatum during flexible decision-making in mice", "track": "Striatum/Dopamine"}, "TEST-01": {"id": "TEST-01", "session": "Test", "board": 0, "presenter": "Test Presenter", "affiliation": "N/A", "title": "Test poster \u2014 safe to use for trying out the portal", "track": "Test"}};
+
+let session = { token: null, identity: null, view: null, activePoster: null, activeIsOptional: false };
+
+function el(html){ const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstChild; }
+function slugify(name){ return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); }
+function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function render(){
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  if(!session.identity){
+    root.appendChild(renderLogin());
+  } else {
+    root.appendChild(renderApp());
+  }
+}
+
+function renderLogin(){
+  const wrap = el(`
+    <div class="wrap">
+      <div class="login-card">
+        <h1>Poster review</h1>
+        <p class="sub">Neurobiology of Cognition &middot; GRC 2026</p>
+        <input id="token-input" placeholder="enter your access code" autocomplete="off" />
+        <button class="btn full" id="login-btn">Continue</button>
+        <div class="error-msg" id="login-error"></div>
+      </div>
+    </div>
+  `);
+  const input = wrap.querySelector('#token-input');
+  const btn = wrap.querySelector('#login-btn');
+  const err = wrap.querySelector('#login-error');
+  async function tryLogin(){
+    const val = input.value.trim().toLowerCase();
+    if(!val) return;
+    btn.disabled = true;
+    err.textContent = '';
+    btn.textContent = 'Checking...';
+    try{
+      const snap = await getDoc(doc(db, 'tokens', val));
+      if(!snap.exists()){
+        err.textContent = "That code doesn't match anything. Check it and try again.";
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+        return;
+      }
+      session.token = val;
+      session.identity = snap.data();
+      session.view = session.identity.isReviewer ? 'reviewer' : 'presenter';
+      render();
+    } catch(e){
+      console.error(e);
+      err.textContent = "Couldn't reach the database. Check your connection and try again.";
+      btn.disabled = false;
+      btn.textContent = 'Continue';
+    }
+  }
+  btn.addEventListener('click', tryLogin);
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') tryLogin(); });
+  return wrap;
+}
+
+function logout(){
+  session = { token: null, identity: null, view: null, activePoster: null, activeIsOptional: false };
+  render();
+}
+
+function renderApp(){
+  const wrap = el(`<div></div>`);
+  const top = el(`
+    <div class="topbar">
+      <div class="brand">Poster review<small>GRC neurobiology of cognition</small></div>
+      <div class="who">${session.identity.name}<button id="logout-btn">Switch code</button></div>
+    </div>
+  `);
+  top.querySelector('#logout-btn').addEventListener('click', logout);
+  wrap.appendChild(top);
+
+  const body = el(`<div class="wrap"></div>`);
+
+  if(session.identity.isAdmin){
+    body.appendChild(renderAdminDashboard());
+  } else if(session.activePoster){
+    body.appendChild(renderReviewForm(session.activePoster, session.activeIsOptional));
+  } else if(session.identity.isReviewer && session.identity.isPresenter){
+    body.appendChild(renderTabs());
+    body.appendChild(session.view === 'reviewer' ? renderReviewerDashboard() : renderPresenterDashboard());
+  } else if(session.identity.isReviewer){
+    body.appendChild(renderReviewerDashboard());
+  } else {
+    body.appendChild(renderPresenterDashboard());
+  }
+
+  wrap.appendChild(body);
+  return wrap;
+}
+
+function renderTabs(){
+  const t = el(`
+    <div class="tabs">
+      <div class="tab" data-v="reviewer">My reviews</div>
+      <div class="tab" data-v="presenter">My poster</div>
+    </div>
+  `);
+  t.querySelectorAll('.tab').forEach(tab => {
+    if(tab.dataset.v === session.view) tab.classList.add('active');
+    tab.addEventListener('click', () => { session.view = tab.dataset.v; render(); });
+  });
+  return t;
+}
+
+function reviewDocId(posterId, reviewerName){
+  return `${posterId}_${slugify(reviewerName)}`;
+}
+
+async function getReview(posterId, reviewerName){
+  try{
+    const snap = await getDoc(doc(db, 'reviews', reviewDocId(posterId, reviewerName)));
+    return snap.exists() ? snap.data() : null;
+  } catch(e){ console.error(e); return null; }
+}
+async function setReview(posterId, reviewerName, obj){
+  try{
+    await setDoc(doc(db, 'reviews', reviewDocId(posterId, reviewerName)), {
+      ...obj, posterId, reviewerName,
+    });
+    return true;
+  } catch(e){
+    console.error('Failed to save review:', e);
+    return false;
+  }
+}
+async function getReviewsForPoster(posterId){
+  try{
+    const q = query(collection(db, 'reviews'), where('posterId', '==', posterId));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => d.data());
+  } catch(e){ console.error(e); return []; }
+}
+async function getAllReviews(){
+  try{
+    const snap = await getDocs(collection(db, 'reviews'));
+    return snap.docs.map(d => d.data());
+  } catch(e){ console.error(e); return []; }
+}
+
+function renderReviewerDashboard(){
+  const container = el(`<div></div>`);
+  const assigned = session.identity.reviewerAssignedPosters || [];
+
+  container.appendChild(el(`<div class="section-label">Your assigned posters (${assigned.length})</div>`));
+  const listNode = el(`<div id="assigned-list"></div>`);
+  container.appendChild(listNode);
+  assigned.forEach(pid => listNode.appendChild(posterCard(pid, false, true)));
+
+  container.appendChild(el(`<div class="section-label">Browse and optionally review any poster</div>`));
+  const browseWrap = el(`<div></div>`);
+  const search = el(`<input id="browse-search" placeholder="search by title, presenter, or board number" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:12px;background:var(--card);" />`);
+  browseWrap.appendChild(search);
+  const browseList = el(`<div id="browse-list"></div>`);
+  browseWrap.appendChild(browseList);
+  container.appendChild(browseWrap);
+
+  function renderBrowseList(filterText){
+    browseList.innerHTML = '';
+    const ft = (filterText||'').toLowerCase();
+    Object.values(POSTERS).forEach(p => {
+      if(assigned.includes(p.id)) return;
+      const hay = (p.title + ' ' + p.presenter + ' ' + p.board).toLowerCase();
+      if(ft && !hay.includes(ft)) return;
+      browseList.appendChild(posterCard(p.id, true, false));
+    });
+  }
+  renderBrowseList('');
+  search.addEventListener('input', () => renderBrowseList(search.value));
+
+  loadStatuses(listNode, assigned);
+  return container;
+}
+
+function posterCard(pid, isOptional, checkStatus){
+  const p = POSTERS[pid];
+  const card = el(`
+    <div class="poster-card" data-pid="${pid}">
+      <div class="board-tag">${p.session === 'Monday/Tuesday' ? 'MT' : 'WT'}-${p.board}</div>
+      <div class="poster-meta">
+        <p class="poster-title">${p.title}</p>
+        <p class="poster-sub">${p.presenter} &middot; ${p.affiliation}</p>
+        <span class="track-pill">${p.track}</span>
+      </div>
+      <div class="status-pill pending" data-status-for="${pid}">${isOptional ? 'optional' : '...'}</div>
+    </div>
+  `);
+  card.addEventListener('click', () => {
+    session.activePoster = pid;
+    session.activeIsOptional = isOptional;
+    render();
+  });
+  return card;
+}
+
+async function loadStatuses(listNode, posterIds){
+  for(const pid of posterIds){
+    const review = await getReview(pid, session.identity.name);
+    const badge = listNode.querySelector(`[data-status-for="${pid}"]`);
+    if(!badge) continue;
+    if(review && review.submitted){
+      badge.textContent = 'submitted';
+      badge.classList.remove('pending');
+      badge.classList.add('done');
+    } else if(review){
+      badge.textContent = 'draft saved';
+    } else {
+      badge.textContent = 'not started';
+    }
+  }
+}
+
+const CRITERIA = [
+  {key:'novelty', label:'Novelty', hint:'Original contribution to the field'},
+  {key:'clarity', label:'Clarity', hint:'Poster communicates clearly'},
+  {key:'rigor', label:'Rigor', hint:'Sound methods and analysis'},
+  {key:'significance', label:'Significance', hint:'Impact and importance of the work'},
+];
+
+function renderReviewForm(pid, isOptional){
+  const p = POSTERS[pid];
+  const wrap = el(`<div></div>`);
+  const back = el(`<span class="back-link">&larr; Back to your list</span>`);
+  back.addEventListener('click', () => { session.activePoster = null; render(); });
+  wrap.appendChild(back);
+
+  const panel = el(`
+    <div class="review-panel">
+      <h2>${p.title} ${isOptional ? '<span class="optional-flag">optional review</span>' : ''}</h2>
+      <p class="presenter-line">Board ${p.session === 'Monday/Tuesday' ? 'MT' : 'WT'}-${p.board} &middot; ${p.presenter} &middot; ${p.affiliation} &middot; <span class="track-pill">${p.track}</span></p>
+      <div id="criteria-wrap"></div>
+      <div class="criterion">
+        <div class="criterion-label">Constructive comments <span class="criterion-hint">optional but encouraged</span></div>
+        <textarea id="comment-box" placeholder="What worked well? What could be sharpened?"></textarea>
+      </div>
+      <div class="save-row">
+        <button class="btn secondary" id="save-draft-btn">Save draft</button>
+        <button class="btn" id="submit-btn">Submit review</button>
+        <span class="save-status" id="save-status"></span>
+      </div>
+    </div>
+  `);
+  wrap.appendChild(panel);
+
+  const scores = {};
+  const critWrap = panel.querySelector('#criteria-wrap');
+  CRITERIA.forEach(c => {
+    const row = el(`
+      <div class="criterion">
+        <div class="criterion-label"><span>${c.label}</span><span class="criterion-hint">${c.hint}</span></div>
+        <div class="dots" data-key="${c.key}">
+          ${[1,2,3,4,5].map(n => `<div class="dot" data-val="${n}">${n}</div>`).join('')}
+        </div>
+      </div>
+    `);
+    row.querySelectorAll('.dot').forEach(d => {
+      d.addEventListener('click', () => {
+        scores[c.key] = parseInt(d.dataset.val);
+        row.querySelectorAll('.dot').forEach(dd => {
+          dd.classList.toggle('active', parseInt(dd.dataset.val) <= scores[c.key]);
+        });
+      });
+    });
+    critWrap.appendChild(row);
+  });
+
+  const commentBox = panel.querySelector('#comment-box');
+  const statusEl = panel.querySelector('#save-status');
+
+  getReview(pid, session.identity.name).then(existing => {
+    if(existing){
+      CRITERIA.forEach(c => {
+        if(existing[c.key]){
+          scores[c.key] = existing[c.key];
+          const row = critWrap.querySelector(`.dots[data-key="${c.key}"]`);
+          row.querySelectorAll('.dot').forEach(dd => {
+            dd.classList.toggle('active', parseInt(dd.dataset.val) <= existing[c.key]);
+          });
+        }
+      });
+      commentBox.value = existing.comment || '';
+      if(existing.submitted) statusEl.textContent = 'Previously submitted — editing will update your review.';
+    }
+  });
+
+  async function doSave(submitted){
+    statusEl.textContent = 'Saving...';
+    const obj = {
+      novelty: scores.novelty || null,
+      clarity: scores.clarity || null,
+      rigor: scores.rigor || null,
+      significance: scores.significance || null,
+      comment: commentBox.value,
+      optional: isOptional,
+      submitted: submitted,
+      updatedAt: new Date().toISOString(),
+    };
+    const ok = await setReview(pid, session.identity.name, obj);
+    statusEl.textContent = ok
+      ? (submitted ? 'Submitted.' : 'Draft saved.')
+      : 'Something went wrong saving — please try again.';
+  }
+
+  panel.querySelector('#save-draft-btn').addEventListener('click', () => doSave(false));
+  panel.querySelector('#submit-btn').addEventListener('click', () => {
+    const allScored = CRITERIA.every(c => scores[c.key]);
+    if(!allScored){
+      statusEl.textContent = 'Score all four criteria before submitting.';
+      return;
+    }
+    doSave(true);
+  });
+
+  return wrap;
+}
+
+function renderPresenterDashboard(){
+  const pid = session.identity.posterId;
+  const p = POSTERS[pid];
+  const container = el(`
+    <div>
+      <div class="section-label">Your poster</div>
+      <div class="review-panel">
+        <h2>${p.title}</h2>
+        <p class="presenter-line">Board ${p.session === 'Monday/Tuesday' ? 'MT' : 'WT'}-${p.board} &middot; <span class="track-pill">${p.track}</span></p>
+        <div id="agg-area"><p class="empty-state">Loading feedback...</p></div>
+      </div>
+    </div>
+  `);
+
+  (async () => {
+    const allReviews = await getReviewsForPoster(pid);
+    const reviews = allReviews.filter(r => r.submitted);
+    const aggArea = container.querySelector('#agg-area');
+    if(reviews.length === 0){
+      aggArea.innerHTML = `<p class="empty-state">No submitted reviews yet. Check back once judging is underway.</p>`;
+      return;
+    }
+    const avg = key => {
+      const vals = reviews.map(r => r[key]).filter(v => v != null);
+      return vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+    };
+    const overall = CRITERIA.map(c => avg(c.key)).filter(v=>v!=null);
+    const overallAvg = overall.length ? (overall.reduce((a,b)=>a+b,0)/overall.length) : null;
+
+    let html = `<div class="section-label" style="margin-top:0;">Aggregate score &middot; ${reviews.length} review(s) in</div>`;
+    html += `<div class="agg-grid">`;
+    html += `<div class="agg-card" style="grid-column:1/-1;background:var(--accent-soft);">
+      <div class="agg-num">${overallAvg ? overallAvg.toFixed(1) : '—'}<span style="font-size:14px;color:var(--muted);">/5</span></div>
+      <div class="agg-label">Overall average</div>
+    </div>`;
+    CRITERIA.forEach(c => {
+      const v = avg(c.key);
+      html += `<div class="agg-card"><div class="agg-num">${v ? v.toFixed(1) : '—'}</div><div class="agg-label">${c.label}</div></div>`;
+    });
+    html += `</div>`;
+
+    const comments = reviews.filter(r => r.comment && r.comment.trim());
+    html += `<div class="section-label">Reviewer feedback</div>`;
+    if(comments.length === 0){
+      html += `<p class="empty-state">No written comments yet.</p>`;
+    } else {
+      comments.forEach(r => {
+        html += `<div class="comment-block">${escapeHtml(r.comment)}</div>`;
+      });
+    }
+    aggArea.innerHTML = html;
+  })();
+
+  return container;
+}
+
+function renderAdminDashboard(){
+  const container = el(`
+    <div>
+      <div class="section-label">Overall completion</div>
+      <div class="agg-grid" id="admin-summary">
+        <div class="agg-card" style="grid-column:1/-1;"><p class="empty-state" style="padding:8px 0;">Loading...</p></div>
+      </div>
+      <div class="section-label">Posters below 3 submitted reviews</div>
+      <div id="admin-poster-list"><p class="empty-state">Loading...</p></div>
+    </div>
+  `);
+
+  (async () => {
+    const allReviews = await getAllReviews();
+    const submittedByPoster = {};
+    allReviews.forEach(r => {
+      if(r.submitted && r.posterId !== 'TEST-01'){
+        submittedByPoster[r.posterId] = (submittedByPoster[r.posterId]||0) + 1;
+      }
+    });
+
+    const posterIds = Object.keys(POSTERS).filter(pid => pid !== 'TEST-01');
+    const totalExpected = posterIds.length * 3;
+    const totalDone = posterIds.reduce((sum,pid) => sum + Math.min(submittedByPoster[pid]||0, 3), 0);
+    const postersComplete = posterIds.filter(pid => (submittedByPoster[pid]||0) >= 3).length;
+
+    const summary = container.querySelector('#admin-summary');
+    summary.innerHTML = `
+      <div class="agg-card" style="background:var(--accent-soft);">
+        <div class="agg-num">${totalDone}<span style="font-size:14px;color:var(--muted);"> / ${totalExpected}</span></div>
+        <div class="agg-label">Reviews submitted</div>
+      </div>
+      <div class="agg-card">
+        <div class="agg-num">${postersComplete}<span style="font-size:14px;color:var(--muted);"> / ${posterIds.length}</span></div>
+        <div class="agg-label">Posters fully reviewed</div>
+      </div>
+    `;
+
+    const posterListEl = container.querySelector('#admin-poster-list');
+    const incomplete = posterIds
+      .map(pid => ({pid, done: Math.min(submittedByPoster[pid]||0, 3)}))
+      .filter(x => x.done < 3)
+      .sort((a,b) => a.done - b.done);
+    if(incomplete.length === 0){
+      posterListEl.innerHTML = `<p class="empty-state">Every poster has all reviews in.</p>`;
+    } else {
+      posterListEl.innerHTML = incomplete.map(x => {
+        const p = POSTERS[x.pid];
+        return `<div class="poster-card" style="cursor:default;">
+          <div class="board-tag">${p.session === 'Monday/Tuesday' ? 'MT' : 'WT'}-${p.board}</div>
+          <div class="poster-meta"><p class="poster-title">${p.title}</p><p class="poster-sub">${p.presenter}</p></div>
+          <div class="status-pill pending">${x.done} / 3</div>
+        </div>`;
+      }).join('');
+    }
+  })();
+
+  return container;
+}
+
+render();
+</script>
+</body>
+</html>
