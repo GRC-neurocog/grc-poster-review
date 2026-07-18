@@ -468,18 +468,14 @@ function renderPresenterDashboard(){
 function renderAdminDashboard(){
   const container = el(`
     <div>
-      <div class="section-label">Overall completion</div>
-      <div class="agg-grid" id="admin-summary">
-        <div class="agg-card" style="grid-column:1/-1;"><p class="empty-state" style="padding:8px 0;">Loading...</p></div>
-      </div>
-      <div class="section-label">Poster rankings (3+ reviews in)</div>
-      <p style="font-size:12px;color:var(--muted);margin:-6px 0 10px;">MT-01 (organizer's own poster) is excluded from the review process entirely for reviewer privacy — it won't appear anywhere in this app</p>
-      <div id="admin-rankings"><p class="empty-state">Loading...</p></div>
-      <div class="section-label">Posters below 3 submitted reviews</div>
-      <div id="admin-poster-list"><p class="empty-state">Loading...</p></div>
+      <div class="section-label">Overall progress</div>
+      <div id="admin-summary" class="agg-grid"></div>
+      <div class="section-label">Poster rankings (3+ reviews submitted)</div>
+      <div id="admin-rankings"></div>
+      <div class="section-label">Posters with incomplete reviews</div>
+      <div id="admin-poster-list"></div>
     </div>
   `);
-
   (async () => {
     const allReviews = await getAllReviews();
     const reviewsByPoster = {};
